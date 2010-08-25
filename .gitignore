@@ -2,9 +2,9 @@
 .DS_Store
 coverage
 rdoc
-pkg
 *.bundle
 *.so
 *.dll
 *.o
 Makefile
+*.gem
