@@ -14,10 +14,10 @@ Then add this to your 'spec/spec_helper.rb', under the line that requires 'spec/
 
 Now add this to any models that you want to autolink:
 
-    def self.default_lineage(object)
-      [:path, :to, :model, object.parent, object]
+    def default_lineage
+      [:path, :to, :model, parent, self]
     end
 
-This default lineage works exactly like ActionController's PolymorphicRouting lineage (since that's what it is...). The reason it's a class method rather than an instance method is to deal with some sticky mock-related issues.
+This default lineage works exactly like ActionController's PolymorphicRouting lineage (since that's what it is...).
 
 I make no guarantees that this will work for you.
