@@ -6,16 +6,15 @@ module ActionController #:nodoc:
     end 
 
     def url_for(options = {})
-      puts options.inspect
       options ||= {}
       case options
       when ActiveRecord::Base                   # +
-        $x = @url                               # +
+        @@__url = @url                          # +
         autolink(options)                       # +
       when String
         options
       when Hash
-        @url = $x unless @url                   # +
+        @url = @@__url unless @url              # +
         @url.rewrite(rewrite_options(options))
       else
         polymorphic_url(options)

@@ -1,0 +1,23 @@
+= autolink
+
+Autolink is a small set of monkeypatches to make linking to objects in deeply-namespaced url schemas completely painless. Say you have object @d, which is almost always referred to as /a/b/@d.b.id/c/@d.c.id/d/@d.id. This plugin lets you specify that default in @d's model, then simply pass @d to rails' link helpers. So `path_for @d` now returns '/a/1/b/2/c/3/d/4'.
+
+== Installation
+
+Autolink only works in Rails 2.3, and has only been tested on 2.3.8. Add it as a gem in config/environment.rb:
+
+    config.gem 'autolink'
+
+Then add this to your 'spec/spec_helper.rb', under the line that requires 'spec/rails':
+
+    require 'autolink/rspec'
+
+Now add this to any models that you want to autolink:
+
+    def self.default_lineage(object)
+      [:path, :to, :model, object.parent, object]
+    end
+
+This default lineage works exactly like ActionController's PolymorphicRouting lineage (since that's what it is...). The reason it's a class method rather than an instance method is to deal with some sticky mock-related issues.
+
+I make no guarantees that this will work for you.
