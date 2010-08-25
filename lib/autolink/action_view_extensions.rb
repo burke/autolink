@@ -4,8 +4,8 @@ module ActionView
       def url_for(options = {})
         options ||= {}
         url = case options
-        when ActiveRecord::Base                                            # This method is the same as 2.3.8, 
-          polymorphic_path(options.class.default_lineage(options))         # Except for the addition of these two lines.
+        when ActiveRecord::Base                      # This method is the same as 2.3.8, 
+          polymorphic_path(options.default_lineage)  # Except for the addition of these two lines.
         when String
           escape = true
           options

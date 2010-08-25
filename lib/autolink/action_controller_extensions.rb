@@ -2,7 +2,7 @@ module ActionController #:nodoc:
   class Base
 
     def autolink(obj)
-      polymorphic_url(obj.class.default_lineage(obj)) 
+      polymorphic_url(obj.default_lineage) 
     end 
 
     def url_for(options = {})
