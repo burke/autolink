@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name    = 'autolink'
-  gem.version = "1.0.0"
+  gem.version = "1.0.1"
 
   gem.author, gem.email = 'Burke Libbey', "burke@burkelibbey.org"
   gem.homepage = "http://github.com/burke/autolink"

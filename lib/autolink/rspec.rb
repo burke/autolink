@@ -1,3 +1,31 @@
+# This is a really bad idea. There's a reason this isn't supported out of the box.
+# ...but I don't want to refactor thousands of specs.
+module Spec
+  module Mocks
+    class Mock
+      def antimock(*methods)
+        methods.each do |method|
+          __mock_proxy.instance_eval <<-CODE
+            def @target.#{method}
+              syms = __mock_proxy.instance_variable_get("@stubs").map(&:sym)
+              @__sub = #{self.class}.new
+              syms.each do |sym|
+                # Define this method to call the same method on @target.
+                that = self
+                (class << @__sub; self; end).send(:define_method, sym) do 
+                  that.send(sym)
+                end 
+              end 
+              @__sub.#{method}
+            end
+          CODE
+        end 
+        self
+      end 
+    end 
+  end 
+end 
+
 module Spec
   module Rails
     module Matchers
@@ -25,24 +53,7 @@ module Spec
     module Mocks
       
       def __post_mock_model(model_class, mock)
-
-        mock.__send__(:__mock_proxy).instance_eval <<-CODE
-          def @target.default_lineage
-            # self == @target
-            syms = __mock_proxy.instance_variable_get("@stubs").map(&:sym)
-            @__sub = #{model_class}.new
-            syms.each do |sym|
-              # Define this method to call the same method on @target.
-              that = self
-              (class << @__sub; self; end).send(:define_method, sym) do 
-                that.send(sym)
-              end 
-            end 
-            @__sub.default_lineage
-          end
-        CODE
-
-        mock
+        mock.antimock(:default_lineage)
       end 
       
       alias __mock_model mock_model
